@@ -61,5 +61,11 @@ public class Animal {
     public void visitar() {
         System.out.print(valor + " ");
                 }
+
+    @Override
+    public String toString() {
+        return "Animal{" + "nombre=" + nombre + ", habilidad=" + habilidad + ", valor=" + valor + ", izquierda=" + izquierda + ", derecha=" + derecha + '}';
+    }
+    
 }
 

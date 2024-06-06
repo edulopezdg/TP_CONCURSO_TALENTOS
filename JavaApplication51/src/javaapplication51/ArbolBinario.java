@@ -1,11 +1,10 @@
-
 package javaapplication51;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ArbolBinario {
+
     private Animal raiz;
 
     public ArbolBinario() {
@@ -30,7 +29,7 @@ public class ArbolBinario {
         return raiz;
     }
 
-  // Método para buscar un valor en el árbol
+    // Método para buscar un valor en el árbol
     public Animal buscarAnimalPorAnimal(Animal animal) {
         return buscarRecursivo(raiz, animal.getValor());
     }
@@ -47,43 +46,43 @@ public class ArbolBinario {
                 : buscarRecursivo(raiz.getDerecha(), valor);
 
     }
-    
+
     public Animal buscarAnimalPorNombre(String nombre) {
-    return buscarRecursivoPorNombre(raiz, nombre);
-}
+        return buscarRecursivoPorNombre(raiz, nombre);
+    }
 
-private Animal buscarRecursivoPorNombre(Animal raiz, String nombre) {
-    if (raiz == null) {
-        return null;
+    private Animal buscarRecursivoPorNombre(Animal raiz, String nombre) {
+        if (raiz == null) {
+            return null;
+        }
+        if (raiz.getNombre().equals(nombre)) {
+            return raiz;
+        }
+        Animal encontrado = buscarRecursivoPorNombre(raiz.getIzquierda(), nombre);
+        if (encontrado != null) {
+            return encontrado;
+        }
+        return buscarRecursivoPorNombre(raiz.getDerecha(), nombre);
     }
-    if (raiz.getNombre().equals(nombre)) {
-        return raiz;
-    }
-    Animal encontrado = buscarRecursivoPorNombre(raiz.getIzquierda(), nombre);
-    if (encontrado != null) {
-        return encontrado;
-    }
-    return buscarRecursivoPorNombre(raiz.getDerecha(), nombre);
-}
 
-public Animal buscarAnimalPorValor(int valor) {
-    return buscarRecursivoPorValor(raiz, valor);
-}
+    public Animal buscarAnimalPorValor(int valor) {
+        return buscarRecursivoPorValor(raiz, valor);
+    }
 
-private Animal buscarRecursivoPorValor(Animal raiz, int valor) {
-    if (raiz == null) {
-        return null;
+    private Animal buscarRecursivoPorValor(Animal raiz, int valor) {
+        if (raiz == null) {
+            return null;
+        }
+        if (raiz.getValor() == valor) {
+            return raiz;
+        }
+        Animal encontrado = buscarRecursivoPorValor(raiz.getIzquierda(), valor);
+        if (encontrado != null) {
+            return encontrado;
+        }
+        return buscarRecursivoPorValor(raiz.getDerecha(), valor);
     }
-    if (raiz.getValor() == valor) {
-        return raiz;
-    }
-    Animal encontrado = buscarRecursivoPorValor(raiz.getIzquierda(), valor);
-    if (encontrado != null) {
-        return encontrado;
-    }
-    return buscarRecursivoPorValor(raiz.getDerecha(), valor);
-}
-     
+
     // Recorrido de un árbol binario en preOrden
     public void preOrden() {
         preOrdenX(raiz);
@@ -111,10 +110,10 @@ private Animal buscarRecursivoPorValor(Animal raiz, int valor) {
     }
 // Recorrido de un árbol binario en postOrdenX
 
-    public void postOrden(){
+    public void postOrden() {
         postOrdenX(raiz);
     }
-    
+
     public static void postOrdenX(Animal raiz) {
         if (raiz != null) {
             postOrdenX(raiz.getIzquierda());
@@ -122,8 +121,8 @@ private Animal buscarRecursivoPorValor(Animal raiz, int valor) {
             raiz.visitar();
         }
     }
-    
-     // Método para contar los elementos del árbol
+
+    // Método para contar los elementos del árbol
     public int contarElementos() {
         return contarRecursivo(raiz);
     }
@@ -134,8 +133,8 @@ private Animal buscarRecursivoPorValor(Animal raiz, int valor) {
         }
         return 1 + contarRecursivo(raiz.getIzquierda()) + contarRecursivo(raiz.getDerecha());
     }
-    
-     // Método para obtener todos los valores del árbol
+
+    // Método para obtener todos los valores del árbol
     public List<Integer> obtenerValores() {
         List<Integer> valores = new ArrayList<>();
         obtenerValoresRecursivo(raiz, valores);
@@ -149,5 +148,58 @@ private Animal buscarRecursivoPorValor(Animal raiz, int valor) {
             obtenerValoresRecursivo(raiz.getDerecha(), valores);
         }
     }
-}
 
+    //Obtener todos los animales del arbol
+    public List<Animal> obtenerAnimales() {
+        List<Animal> animales = new ArrayList<>();
+        obtenerAnimalesRecursivo(raiz, animales);
+        return animales;
+    }
+
+    private void obtenerAnimalesRecursivo(Animal raiz, List<Animal> animales) {
+        if (raiz != null) {
+            obtenerAnimalesRecursivo(raiz.getIzquierda(), animales);
+            animales.add(raiz);
+            obtenerAnimalesRecursivo(raiz.getDerecha(), animales);
+        }
+    }
+
+    //Metodo de profundidad
+    public int profundidadAnimal(Animal animal) {
+        return profundidadRecursiva(raiz, animal, 0);
+    }
+
+    private int profundidadRecursiva(Animal raiz, Animal animal, int profundidad) {
+        if (raiz == null) {
+            return -1; // Si no se encuentra el animal, devuelve -1
+        }
+        if (raiz == animal) {
+            return profundidad; // Se encontró el animal, devuelve la profundidad actual
+        }
+        // Busca en los subárboles izquierdo y derecho
+        int profundidadIzquierda = profundidadRecursiva(raiz.getIzquierda(), animal, profundidad + 1);
+        int profundidadDerecha = profundidadRecursiva(raiz.getDerecha(), animal, profundidad + 1);
+        // Devuelve la profundidad máxima encontrada en ambos subárboles
+        return Math.max(profundidadIzquierda, profundidadDerecha);
+    }
+
+    //Imprimir arbol
+    
+    
+    public void imprimirArbolGrafico() {
+        if (raiz == null) {
+            System.out.println("El árbol está vacío.");
+            return;
+        }
+        System.out.println("Imprimiendo el árbol:");
+        imprimirGraficoRecursivo(raiz, "", true);
+    }
+
+    private void imprimirGraficoRecursivo(Animal animal, String prefijo, boolean esIzquierdo) {
+        if (animal != null) {
+            System.out.println(prefijo + (esIzquierdo ? "├── " : "└── ") + animal.getNombre());
+            imprimirGraficoRecursivo(animal.getIzquierda(), prefijo + (esIzquierdo ? "│   " : "    "), true);
+            imprimirGraficoRecursivo(animal.getDerecha(), prefijo + (esIzquierdo ? "│   " : "    "), false);
+        }
+    }
+}
