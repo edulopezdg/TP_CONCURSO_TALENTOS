@@ -1,5 +1,8 @@
 package javaapplication51;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -8,35 +11,7 @@ public class Concurso {
     public static void main(String[] args) {
         ArbolBinario arbol = new ArbolBinario();
         Scanner scanner = new Scanner(System.in);
-
-        // Lista de 20 animales predefinidos
-        Animal[] animales = {
-            new Animal("Leon", "Grrrr Ruje", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Tigre", "Grrrr Corre rápido", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Elefante", "Prrr Trompetea", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Gato", "Miau Maulla", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Perro", "Guau Ladra", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Lobo", "Auuuu Aúlla", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Zorro", "Ji, ji, ji Escabúllase", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Conejo", "Fui, fui Salta alto", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Oso", "Gruu Pesca", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Jirafa", "Mmmm Alcanza hojas altas", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Rinoceronte", "Buf Embiste", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Hipopotamo", "Bof Bucea", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Canguro", "Boing Boxea", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Koala", "Gruñido Trepa", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Panda", "Grrr Rueda", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Caballo", "Relincho Galopea", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Vaca", "Muuu Muge", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Cerdo", "Oinc Revolcarse en el lodo", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Oveja", "Beee Bala", ThreadLocalRandom.current().nextInt(1, 101)),
-            new Animal("Gallina", "Coc, coc, coc Pone huevos", ThreadLocalRandom.current().nextInt(1, 101))
-        };
-
-        // Inserción de los 20 animales
-        for (Animal animal : animales) {
-            arbol.insertarAnimal(animal);
-        }
+        cargarAnimales(arbol);
 
         while (true) {
             System.out.println("\nConcurso de talentos del Bosque Binario");
@@ -70,27 +45,10 @@ public class Concurso {
         int puntosJugador = 0;
         int puntosMaquina = 0;
 
-        System.out.println("Jugador selecciona 3 animales:");
-        for (int i = 0; i < 3; i++) {
-            System.out.print("Ingrese el nombre del animal " + (i + 1) + ": ");
-            String nombreJugador = scanner.nextLine();
-            Animal animalJugador = arbol.buscarAnimal(nombreJugador);
-            if (animalJugador != null) {
-                System.out.println("Habilidad de " + animalJugador.getNombre() + ": " + animalJugador.getHabilidad());
-                puntosJugador += animalJugador.getValor();
-            } else {
-                System.out.println("Animal no encontrado, por favor ingrese otro animal.");
-                i--; // Reintentar la misma iteración
-            }
-        }
+        puntosJugador = juegaHumano(puntosJugador, scanner, arbol);
 
         System.out.println("La máquina selecciona 3 animales:");
-        for (int i = 0; i < 3; i++) {
-            String nombreMaquina = "AnimalMaquina" + (i + 1);
-            int habilidadMaquina = ThreadLocalRandom.current().nextInt(1, 101); // Generar habilidad aleatoria entre 1 y 100
-            System.out.println("Habilidad de " + nombreMaquina + ": " + habilidadMaquina);
-            puntosMaquina += habilidadMaquina;
-        }
+        puntosMaquina = juegaMaquina(puntosMaquina, arbol);
 
         System.out.println("Puntos del Jugador: " + puntosJugador);
         System.out.println("Puntos de la Máquina: " + puntosMaquina);
@@ -108,33 +66,8 @@ public class Concurso {
         int puntosJugador1 = 0;
         int puntosJugador2 = 0;
 
-        System.out.println("Jugador 1 selecciona 3 animales:");
-        for (int i = 0; i < 3; i++) {
-            System.out.print("Ingrese el nombre del animal " + (i + 1) + ": ");
-            String nombreJugador1 = scanner.nextLine();
-            Animal animalJugador1 = arbol.buscarAnimal(nombreJugador1);
-            if (animalJugador1 != null) {
-                System.out.println("Habilidad de " + animalJugador1.getNombre() + ": " + animalJugador1.getHabilidad());
-                puntosJugador1 += animalJugador1.getValor();
-            } else {
-                System.out.println("Animal no encontrado, por favor ingrese otro animal.");
-                i--; // Reintentar la misma iteración
-            }
-        }
-
-        System.out.println("Jugador 2 selecciona 3 animales:");
-        for (int i = 0; i < 3; i++) {
-            System.out.print("Ingrese el nombre del animal " + (i + 1) + ": ");
-            String nombreJugador2 = scanner.nextLine();
-            Animal animalJugador2 = arbol.buscarAnimal(nombreJugador2);
-            if (animalJugador2 != null) {
-                System.out.println("Habilidad de " + animalJugador2.getNombre() + ": " + animalJugador2.getHabilidad());
-                puntosJugador2 += animalJugador2.getValor();
-            } else {
-                System.out.println("Animal no encontrado, por favor ingrese otro animal.");
-                i--; // Reintentar la misma iteración
-            }
-        }
+        puntosJugador1 = juegaHumano(puntosJugador1, scanner, arbol);
+        puntosJugador2 = juegaHumano(puntosJugador2, scanner, arbol);
 
         System.out.println("Puntos del Jugador 1: " + puntosJugador1);
         System.out.println("Puntos del Jugador 2: " + puntosJugador2);
@@ -147,4 +80,81 @@ public class Concurso {
             System.out.println("Empate");
         }
     }
+
+    public static Animal[] cargarAnimales(ArbolBinario arbol) {
+
+        Random random = new Random(100);
+
+        // Lista de 20 animales predefinidos
+        Animal[] animales = {
+    new Animal("leon", "Grrrr Ruje", random.nextInt(100)),
+    new Animal("tigre", "Grrrr Corre rápido", random.nextInt(100)),
+    new Animal("elefante", "Prrr Trompetea", random.nextInt(100)),
+    new Animal("gato", "Miau Maulla", random.nextInt(100)),
+    new Animal("perro", "Guau Ladra", random.nextInt(100)),
+    new Animal("lobo", "Auuuu Aúlla", random.nextInt(100)),
+    new Animal("zorro", "Ji, ji, ji Escabúllase", random.nextInt(100)),
+    new Animal("conejo", "Fui, fui Salta alto", random.nextInt(100)),
+    new Animal("oso", "Gruu Pesca", random.nextInt(100)),
+    new Animal("jirafa", "Mmmm Alcanza hojas altas", random.nextInt(100)),
+    new Animal("rinoceronte", "Buf Embiste", random.nextInt(100)),
+    new Animal("hipopotamo", "Bof Bucea", random.nextInt(100)),
+    new Animal("canguro", "Boing Boxea", random.nextInt(100)),
+    new Animal("koala", "Gruñido Trepa", random.nextInt(100)),
+    new Animal("panda", "Grrr Rueda", random.nextInt(100)),
+    new Animal("caballo", "Relincho Galopea", random.nextInt(100)),
+    new Animal("vaca", "Muuu Muge", random.nextInt(100)),
+    new Animal("cerdo", "Oinc Revolcarse en el lodo", random.nextInt(100)),
+    new Animal("oveja", "Beee Bala", random.nextInt(100)),
+    new Animal("gallina", "Coc, coc, coc Pone huevos", random.nextInt(100))
+};
+
+
+        // Inserción de los 20 animales
+        for (Animal animal : animales) {
+            arbol.insertarAnimal(animal);
+        }
+
+        return animales;
+    }
+
+    public static int juegaHumano(int puntosJugador, Scanner scanner, ArbolBinario arbol) {
+
+        System.out.println("Jugador selecciona 3 animales:");
+        for (int i = 0; i < 3; i++) {
+            System.out.print("Ingrese el nombre del animal " + (i + 1) + ": ");
+            String nombreJugador = scanner.nextLine().toLowerCase();
+            Animal animalJugador = arbol.buscarAnimalPorNombre(nombreJugador);
+            if (animalJugador != null) {
+                System.out.println("Habilidad de " + animalJugador.getNombre() + ": " + animalJugador.getHabilidad());
+                puntosJugador += animalJugador.getValor();
+            } else {
+                System.out.println("Animal no encontrado, por favor ingrese otro animal.");
+                i--; // Reintentar la misma iteración
+            }
+        }
+        return puntosJugador;
+    }
+
+  public static int juegaMaquina(int puntosMaquina, ArbolBinario arbol) {
+    Random random = new Random();
+    List<Integer> valores = arbol.obtenerValores();
+    List<Animal> animalesSeleccionados = new ArrayList<>();
+
+    for (int i = 0; i < 3; i++) {
+        Animal animalSeleccionado;
+        do {
+            int indice = random.nextInt(valores.size());
+            int valorSeleccionado = valores.get(indice);
+            animalSeleccionado = arbol.buscarAnimalPorValor(valorSeleccionado);
+        } while (animalesSeleccionados.contains(animalSeleccionado));
+        
+        animalesSeleccionados.add(animalSeleccionado);
+        System.out.println("Habilidad de " + animalSeleccionado.getNombre() + ": " + animalSeleccionado.getHabilidad());
+        puntosMaquina += animalSeleccionado.getValor();
+    }
+    return puntosMaquina;
+}
+    
+    
 }

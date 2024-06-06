@@ -57,5 +57,9 @@ public class Animal {
     public void setDerecha(Animal derecha) {
         this.derecha = derecha;
     }
+    //Visitamos e imprimimos valor
+    public void visitar() {
+        System.out.print(valor + " ");
+                }
 }
 
